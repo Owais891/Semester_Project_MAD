@@ -30,36 +30,49 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final entries = cartItems.entries.toList();
+    final itemCount = entries.fold<int>(
+      0,
+      (total, entry) => total + entry.value,
+    );
 
     if (entries.isEmpty) {
       return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
-              Icons.shopping_bag_outlined,
-              size: 42,
-              color: AppColors.orange,
+            Container(
+              width: 88,
+              height: 88,
+              decoration: const BoxDecoration(
+                color: AppColors.paleOrange,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.shopping_bag_outlined,
+                size: 40,
+                color: AppColors.tomato,
+              ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 20),
             const Text(
               'Your cart is empty',
               style: TextStyle(
-                fontSize: 19,
+                fontSize: 22,
                 fontWeight: FontWeight.w800,
                 color: AppColors.charcoal,
               ),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
             const Text(
               'Add something delicious to get started.',
-              style: TextStyle(color: AppColors.muted),
+              textAlign: TextAlign.center,
+              style: TextStyle(color: AppColors.muted, fontSize: 14),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 22),
             FilledButton.icon(
               onPressed: onBrowseMenu,
-              icon: const Icon(Icons.restaurant_menu),
-              label: const Text('Browse menu'),
+              icon: const Icon(Icons.restaurant_menu_rounded),
+              label: const Text('Explore the menu'),
             ),
           ],
         ),
@@ -67,76 +80,100 @@ class CartPage extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 18),
       child: Column(
         children: [
           Row(
             children: [
               const Expanded(
-                child: Text(
-                  'Your cart',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.charcoal,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Your cart',
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.charcoal,
+                        letterSpacing: -0.5,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      'Your favorites, all in one place.',
+                      style: TextStyle(fontSize: 13, color: AppColors.muted),
+                    ),
+                  ],
                 ),
               ),
               Text(
-                '${entries.length} items',
-                style: const TextStyle(fontSize: 13, color: AppColors.muted),
+                '$itemCount ${itemCount == 1 ? 'item' : 'items'}',
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.charcoal,
+                ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 4),
               IconButton(
                 tooltip: 'Clear cart',
                 onPressed: onClear,
-                icon: const Icon(Icons.delete_outline, color: AppColors.tomato),
+                style: IconButton.styleFrom(
+                  backgroundColor: AppColors.paleOrange,
+                  foregroundColor: AppColors.tomato,
+                  minimumSize: const Size(42, 42),
+                ),
+                icon: const Icon(Icons.delete_outline_rounded, size: 20),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 18),
           Expanded(
             child: ListView.separated(
               itemCount: entries.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 8),
+              separatorBuilder: (_, _) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
                 final entry = entries[index];
                 final item = findItem(entry.key);
                 if (item == null) return const SizedBox();
 
                 return Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 9,
-                    vertical: 8,
-                  ),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(18),
                     border: Border.all(color: AppColors.border),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.charcoal.withValues(alpha: 0.035),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
                   child: Row(
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(14),
                         child: Image.network(
                           item.imageUrl,
-                          width: 56,
-                          height: 56,
+                          width: 76,
+                          height: 76,
                           fit: BoxFit.cover,
                           errorBuilder: (_, _, _) => Container(
-                            width: 56,
-                            height: 56,
+                            width: 76,
+                            height: 76,
                             color: AppColors.paleOrange,
                             alignment: Alignment.center,
                             child: const Icon(
                               Icons.restaurant,
                               color: AppColors.tomato,
-                              size: 22,
+                              size: 26,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 14),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,16 +183,16 @@ class CartPage extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontSize: 15,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w800,
                                 color: AppColors.charcoal,
                               ),
                             ),
-                            const SizedBox(height: 5),
+                            const SizedBox(height: 8),
                             Text(
                               formatPkr(item.price),
                               style: const TextStyle(
-                                fontSize: 14,
+                                fontSize: 15,
                                 fontWeight: FontWeight.w700,
                                 color: AppColors.tomato,
                               ),
@@ -170,12 +207,12 @@ class CartPage extends StatelessWidget {
                             onTap: () => onRemove(entry.key),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: Text(
                               entry.value.toString(),
                               style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w800,
                                 color: AppColors.charcoal,
                               ),
                             ),
@@ -195,14 +232,24 @@ class CartPage extends StatelessWidget {
           const SizedBox(height: 14),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            padding: const EdgeInsets.fromLTRB(18, 16, 18, 14),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(20),
               border: Border.all(color: AppColors.border),
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const Text(
+                  'Order summary',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.charcoal,
+                  ),
+                ),
+                const SizedBox(height: 14),
                 CartSummaryLine(
                   label: 'Subtotal',
                   amount: cartTotal.toInt() - 150,
@@ -223,7 +270,7 @@ class CartPage extends StatelessWidget {
             width: double.infinity,
             child: FilledButton.icon(
               onPressed: onCheckout,
-              icon: const Icon(Icons.payment_outlined),
+              icon: const Icon(Icons.arrow_forward_rounded),
               label: const Text('Checkout'),
             ),
           ),
