@@ -62,6 +62,16 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ],
             ),
+            const SizedBox(height: 6),
+            const Text(
+              'Manage your details, delivery addresses, orders and favorite meals in one place.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: AppColors.muted,
+                fontSize: 13,
+                height: 1.4,
+              ),
+            ),
             const SizedBox(height: 14),
             Container(
               width: double.infinity,
