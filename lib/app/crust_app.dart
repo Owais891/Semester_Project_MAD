@@ -12,7 +12,7 @@ class CrustApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'Crust Food',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.light,
+      theme: AppTheme.lightTheme,
       routerConfig: appRouter,
       builder: (context, child) {
         return LayoutBuilder(

@@ -6,7 +6,7 @@ class AdminLoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Admin sign in')),
+      appBar: AppBar(title: const Text('Admin Signin')),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 420),

@@ -8,7 +8,7 @@ class AdminDashboardPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Admin dashboard')),
       body: const Center(
-        child: Padding(
+        child: marging(
           padding: EdgeInsets.all(24),
           child: Text('Staff tools will appear here when the admin feature is implemented.', textAlign: TextAlign.center),
         ),
